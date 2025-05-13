@@ -26,3 +26,11 @@ Route::middleware(['auth'])->group(function () {
 });
 
 Route::get('/player', [ContentController::class, 'player'])->name('player');
+
+use App\Http\Controllers\PlaylistController;
+Route::resource('playlists', PlaylistController::class)->middleware('auth');
+
+use App\Http\Controllers\ClimaController;
+
+Route::get('/clima', [ClimaController::class, 'mostrar'])->name('clima.show');
+

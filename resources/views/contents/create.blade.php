@@ -3,14 +3,14 @@
         <h1 class="text-2xl font-bold mb-6">Adicionar Novo Conteúdo</h1>
 
         @if ($errors->any())
-            <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
-                <strong>Ops! Algo deu errado:</strong>
-                <ul class="mt-2 list-disc list-inside">
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
+        <div class="mb-6 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
+            <strong>Ops! Algo deu errado:</strong>
+            <ul class="mt-2 list-disc list-inside">
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
         @endif
 
         <form method="POST" action="{{ route('contents.store') }}" enctype="multipart/form-data" class="space-y-6">
@@ -51,6 +51,15 @@
                     Salvar
                 </button>
             </div>
+            <div>
+                <label for="start_at" class="block font-semibold mb-1">Início do Agendamento (opcional):</label>
+                <input type="datetime-local" name="start_at" id="start_at" value="{{ old('start_at', isset($content) ? $content->start_at ? $content->start_at->format('Y-m-d\TH:i') : '' : '') }}" class="border rounded p-2 w-full" />
+            </div>
+
+            <div>
+                <label for="end_at" class="block font-semibold mb-1">Fim do Agendamento (opcional):</label>
+                <input type="datetime-local" name="end_at" id="end_at" value="{{ old('end_at', isset($content) ? $content->end_at ? $content->end_at->format('Y-m-d\TH:i') : '' : '') }}" class="border rounded p-2 w-full" />
+            </div>
         </form>
     </div>
 
@@ -75,9 +84,10 @@
         document.addEventListener('DOMContentLoaded', () => {
             const typeSelect = document.getElementById('type');
             if (typeSelect.value) {
-                handleTypeChange({ target: typeSelect });
+                handleTypeChange({
+                    target: typeSelect
+                });
             }
         });
     </script>
 </x-app-layout>
-

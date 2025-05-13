@@ -36,6 +36,9 @@ class ContentController extends Controller
         'type' => 'required|string',
         'file' => 'nullable|file|mimes:jpg,jpeg,png,mp4|max:2048', // Ajuste conforme necessário
         'text' => 'nullable|string',
+        'start_at' => 'nullable|date',
+        'end_at' => 'nullable|date|after_or_equal:start_at',
+
     ]);
 
     // Criação do novo conteúdo
@@ -46,7 +49,7 @@ class ContentController extends Controller
     // Verifica se um arquivo foi enviado
     if ($request->hasFile('file')) {
         $path = $request->file('file')->store('uploads', 'public'); // Armazena o arquivo
-        $content->file_path = $path; // Supondo que você tenha uma coluna file_path na tabela
+        $content->path = $path; // Supondo que você tenha uma coluna file_path na tabela
     }
 
     // Verifica se o tipo é texto e armazena o texto
@@ -82,7 +85,10 @@ class ContentController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|in:image,video,text',
             'file' => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,mp4,mov,avi|max:20480',
-            'text' => 'required_if:type,text|string'
+            'text' => 'required_if:type,text|string',
+            'start_at' => 'nullable|date',
+            'end_at' => 'nullable|date|after_or_equal:start_at',
+
         ]);
 
         $content->title = $request->title;

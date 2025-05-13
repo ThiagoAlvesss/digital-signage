@@ -5,25 +5,25 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Content extends Model
+class Playlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = [
-        'title',
-        'type',
-        'path',
-        'text',
-        'start_at',
-        'end_at',
-    ];
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
+    protected $fillable = ['name', 'description', 'start_at', 'end_at'];
 
     /**
-     * Scope para filtrar conteúdos ativos conforme agendamento.
-     *
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @return \Illuminate\Database\Eloquent\Builder
+     * The contents that belong to the playlist.
      */
+    public function contents()
+    {
+        return $this->belongsToMany(Content::class, 'playlist_content');
+    }
+    // Para Content.php e Playlist.php
     public function scopeActive($query)
     {
         $now = now();
@@ -35,4 +35,3 @@ class Content extends Model
         });
     }
 }
-

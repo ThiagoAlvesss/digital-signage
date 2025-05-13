@@ -18,6 +18,13 @@
                         Gerenciar Conteúdos
                     </a>
                 </div>
+                <div style="max-width: 600px; margin: 2rem auto; text-align: center;">
+
+                    <a href="{{ route('playlists.index') }}"
+                        style="display: inline-block; padding: 0.75rem 1.5rem; background-color: #2563eb; color: white; font-weight: 600; border-radius: 6px; text-decoration: none; transition: background-color 0.3s;">
+                        Gerenciar Playlists
+                    </a>
+                </div>
             </div>
         </div>
     </div>
