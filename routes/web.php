@@ -30,7 +30,14 @@ Route::get('/player', [ContentController::class, 'player'])->name('player');
 use App\Http\Controllers\PlaylistController;
 Route::resource('playlists', PlaylistController::class)->middleware('auth');
 
-use App\Http\Controllers\ClimaController;
+use App\Http\Controllers\PlayerController;
+Route::get('/player/{identifier}', [PlayerController::class, 'showPlayer'])->name('player.show');
+Route::middleware(['auth'])->group(function () {
+    Route::resource('players', PlayerController::class);
+Route::get('/preview/playlist/{id}', [PlayerController::class, 'preview'])->name('playlist.preview');
+    Route::resource('players', PlayerController::class);
+    
+});
 
-Route::get('/clima', [ClimaController::class, 'mostrar'])->name('clima.show');
 
+    

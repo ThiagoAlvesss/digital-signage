@@ -9,11 +9,6 @@ class Playlist extends Model
 {
     use HasFactory;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array
-     */
     protected $fillable = ['name', 'description', 'start_at', 'end_at'];
 
     /**
@@ -23,15 +18,22 @@ class Playlist extends Model
     {
         return $this->belongsToMany(Content::class, 'playlist_content');
     }
-    // Para Content.php e Playlist.php
-    public function scopeActive($query)
+
+    /**
+     * Scope to get active contents for preview, ordered by 'order' field.
+     */
+    public function getPreviewContents()
     {
         $now = now();
 
-        return $query->where(function ($query) use ($now) {
-            $query->whereNull('start_at')->orWhere('start_at', '<=', $now);
-        })->where(function ($query) use ($now) {
-            $query->whereNull('end_at')->orWhere('end_at', '>=', $now);
-        });
+        return $this->contents()
+            ->where(function ($query) use ($now) {
+                $query->whereNull('start_at')->orWhere('start_at', '<=', $now);
+            })
+            ->where(function ($query) use ($now) {
+                $query->whereNull('end_at')->orWhere('end_at', '>=', $now);
+            })
+            ->orderBy('order', 'asc')
+            ->get();
     }
 }

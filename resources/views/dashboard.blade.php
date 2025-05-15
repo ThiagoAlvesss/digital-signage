@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+            {{ __('Home') }}
         </h2>
     </x-slot>
 
@@ -23,6 +23,13 @@
                     <a href="{{ route('playlists.index') }}"
                         style="display: inline-block; padding: 0.75rem 1.5rem; background-color: #2563eb; color: white; font-weight: 600; border-radius: 6px; text-decoration: none; transition: background-color 0.3s;">
                         Gerenciar Playlists
+                    </a>
+                </div>
+                <div style="max-width: 600px; margin: 2rem auto; text-align: center;">
+
+                    <a href="{{ route('players.index') }}"
+                        style="display: inline-block; padding: 0.75rem 1.5rem; background-color: #2563eb; color: white; font-weight: 600; border-radius: 6px; text-decoration: none; transition: background-color 0.3s;">
+                        Gerenciar Players
                     </a>
                 </div>
             </div>
