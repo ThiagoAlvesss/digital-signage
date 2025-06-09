@@ -14,10 +14,12 @@ class Playlist extends Model
     /**
      * The contents that belong to the playlist.
      */
-    public function contents()
-    {
-        return $this->belongsToMany(Content::class, 'playlist_content');
-    }
+   public function contents()
+{
+    return $this->belongsToMany(Content::class, 'playlist_content') // Adicionei 'playlist_content' aqui
+                ->withPivot('order')
+                ->orderBy('playlist_content.order');
+}
 
     /**
      * Scope to get active contents for preview, ordered by 'order' field.

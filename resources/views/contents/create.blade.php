@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md mt-6">
+    <div class="max-w-3xl mx-auto p-6 bg-white shadow-md rounded-md mt-6 ml-20px">
         <h1 class="text-2xl font-bold mb-6">Adicionar Novo Conteúdo</h1>
 
         @if ($errors->any())

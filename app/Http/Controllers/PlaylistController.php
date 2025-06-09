@@ -9,11 +9,11 @@ use Illuminate\Http\Request;
 class PlaylistController extends Controller
 {
     /**
-     * Display a listing of playlists.
+     * Display a listing of the playlists.
      */
     public function index()
     {
-        $playlists = Playlist::all();
+        $playlists = Playlist::paginate(10);
         return view('playlists.index', compact('playlists'));
     }
 
@@ -22,7 +22,7 @@ class PlaylistController extends Controller
      */
     public function create()
     {
-        $contents = Content::all(); // para selecionar conteúdos na playlist
+        $contents = Content::all();
         return view('playlists.create', compact('contents'));
     }
 
@@ -34,21 +34,22 @@ class PlaylistController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'contents' => 'array',
-            'contents.*' => 'exists:contents,id',
+            'display_duration' => 'nullable|integer|min:1|max:3600',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
-
+            'contents' => 'required|array',
+            'contents.*' => 'exists:contents,id',
         ]);
 
         $playlist = Playlist::create([
             'name' => $request->name,
             'description' => $request->description,
+            'display_duration' => $request->display_duration ?? 7,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
         ]);
 
-        if ($request->has('contents')) {
-            $playlist->contents()->sync($request->contents);
-        }
+        $playlist->contents()->sync($request->contents);
 
         return redirect()->route('playlists.index')->with('success', 'Playlist criada com sucesso!');
     }
@@ -59,8 +60,7 @@ class PlaylistController extends Controller
     public function edit(Playlist $playlist)
     {
         $contents = Content::all();
-        $selectedContents = $playlist->contents->pluck('id')->toArray();
-
+        $selectedContents = $playlist->contents()->pluck('content_id')->toArray(); // assuming pivot table 'playlist_content'
         return view('playlists.edit', compact('playlist', 'contents', 'selectedContents'));
     }
 
@@ -72,23 +72,22 @@ class PlaylistController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'contents' => 'array',
-            'contents.*' => 'exists:contents,id',
+            'display_duration' => 'nullable|integer|min:1|max:3600',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
-
+            'contents' => 'required|array',
+            'contents.*' => 'exists:contents,id',
         ]);
 
         $playlist->update([
             'name' => $request->name,
             'description' => $request->description,
+            'display_duration' => $request->display_duration ?? 10,
+            'start_at' => $request->start_at,
+            'end_at' => $request->end_at,
         ]);
 
-        if ($request->has('contents')) {
-            $playlist->contents()->sync($request->contents);
-        } else {
-            $playlist->contents()->detach();
-        }
+        $playlist->contents()->sync($request->contents);
 
         return redirect()->route('playlists.index')->with('success', 'Playlist atualizada com sucesso!');
     }
@@ -98,20 +97,10 @@ class PlaylistController extends Controller
      */
     public function destroy(Playlist $playlist)
     {
+        // Optionally detach related contents
         $playlist->contents()->detach();
         $playlist->delete();
 
         return redirect()->route('playlists.index')->with('success', 'Playlist excluída com sucesso!');
     }
-
-    /**
-     * Show the contents of a playlist to playback.
-     */
-    public function show(Playlist $playlist)
-    {
-        $contents = $playlist->contents()->get();
-
-        return view('player', compact('contents'));
-    }
 }
-

@@ -16,6 +16,7 @@ class Content extends Model
         'text',
         'start_at',
         'end_at',
+        'display_duration',
     ];
 
     /**

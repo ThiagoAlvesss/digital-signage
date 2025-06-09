@@ -1,7 +1,7 @@
 <x-app-layout>
     <div class="max-w-6xl mx-auto px-4 py-8">
         <header class="flex items-center justify-between mb-8">
-            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Playlists Digitais</h1>
+            <h1 class="text-4xl font-extrabold tracking-tight text-gray-900">Playlists</h1>
             <a href="{{ route('playlists.create') }}" class="inline-flex items-center px-6 py-3 bg-blue-700 hover:bg-blue-800 text-white rounded-lg shadow-lg transition duration-300 font-semibold text-lg">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />

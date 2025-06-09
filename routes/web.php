@@ -5,11 +5,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->middleware(['auth', 'verified'])->name('welcome');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -39,5 +39,12 @@ Route::get('/preview/playlist/{id}', [PlayerController::class, 'preview'])->name
     
 });
 
+Route::get('/home', function () {
+    return view('home');
+})->middleware(['auth'])->name('home');
 
-    
+
+Route::post('/playlists/{playlist}/order', [App\Http\Controllers\PlaylistController::class, 'updateOrder'])->name('playlists.order');
+
+Route::post('/playlists/{playlist}/contents/{content}/add-ajax', [App\Http\Controllers\PlaylistController::class, 'addContentAjax'])->name('playlists.contents.add-ajax');
+Route::post('/playlists/{playlist}/contents/{content}/remove-ajax', [App\Http\Controllers\PlaylistController::class, 'removeContentAjax'])->name('playlists.contents.remove-ajax');
