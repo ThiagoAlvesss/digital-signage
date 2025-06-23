@@ -9,16 +9,15 @@ class Playlist extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['name', 'description', 'start_at', 'end_at'];
+    protected $fillable = ['name', 'description','start_at', 'end_at'];
 
     /**
      * The contents that belong to the playlist.
      */
    public function contents()
 {
-    return $this->belongsToMany(Content::class, 'playlist_content') // Adicionei 'playlist_content' aqui
-                ->withPivot('order')
-                ->orderBy('playlist_content.order');
+    return $this->belongsToMany(Content::class, 'playlist_content'); // Adicionei 'playlist_content' aqui
+                
 }
 
     /**

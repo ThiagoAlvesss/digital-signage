@@ -15,8 +15,7 @@ class Content extends Model
         'path',
         'text',
         'start_at',
-        'end_at',
-        'display_duration',
+        'end_at'
     ];
 
     /**

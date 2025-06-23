@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddOrderToPlaylistContentTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -12,17 +12,14 @@ class AddOrderToPlaylistContentTable extends Migration
     public function up()
     {
         Schema::table('playlist_content', function (Blueprint $table) {
-            $table->integer('order')->default(0)->after('content_id');
+            $table->integer('duration')->default(10);  // Tempo de exibição em segundos
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down()
     {
         Schema::table('playlist_content', function (Blueprint $table) {
-            $table->dropColumn('order');
+            $table->dropColumn('duration');
         });
     }
-}
+};

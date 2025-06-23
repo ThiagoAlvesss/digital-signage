@@ -34,7 +34,6 @@ class PlaylistController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'display_duration' => 'nullable|integer|min:1|max:3600',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
             'contents' => 'required|array',
@@ -44,7 +43,6 @@ class PlaylistController extends Controller
         $playlist = Playlist::create([
             'name' => $request->name,
             'description' => $request->description,
-            'display_duration' => $request->display_duration ?? 7,
             'start_at' => $request->start_at,
             'end_at' => $request->end_at,
         ]);
@@ -72,7 +70,6 @@ class PlaylistController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'display_duration' => 'nullable|integer|min:1|max:3600',
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
             'contents' => 'required|array',
@@ -82,13 +79,24 @@ class PlaylistController extends Controller
         $playlist->update([
             'name' => $request->name,
             'description' => $request->description,
-            'display_duration' => $request->display_duration ?? 10,
             'start_at' => $request->start_at,
             'end_at' => $request->end_at,
         ]);
 
-        $playlist->contents()->sync($request->contents);
+        $syncData = [];
 
+        if ($request->has('contents')) {
+            foreach ($request->contents as $contentId) {
+                // Verifica se veio um duration para esse conteúdo
+                $duration = $request->durations[$contentId] ?? 10;
+                $syncData[$contentId] = ['duration' => $duration];
+            }
+
+            $playlist->contents()->sync($syncData);
+        } else {
+            // Se nenhum conteúdo for selecionado
+            $playlist->contents()->detach();
+        }
         return redirect()->route('playlists.index')->with('success', 'Playlist atualizada com sucesso!');
     }
 
