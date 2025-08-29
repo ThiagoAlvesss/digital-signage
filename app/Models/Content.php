@@ -13,6 +13,7 @@ class Content extends Model
         'title',
         'type',
         'path',
+        'duration', // Adicionando o campo duration
         'text',
         'start_at',
         'end_at'

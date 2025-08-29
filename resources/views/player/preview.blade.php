@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Player Digital Signage</title>
     <style>
-        body, html {
+        body,
+        html {
             background: black;
             margin: 0;
             padding: 0;
@@ -18,6 +20,7 @@
             color: white;
             font-family: Arial, sans-serif;
         }
+
         #playerContent {
             flex: 1;
             width: 100%;
@@ -26,12 +29,15 @@
             align-items: center;
             overflow: hidden;
         }
-        img, video {
-            width: 100vw;
-            height: 100vh;
+
+        img,
+        video {
+            width: 90vw;
+            height: 90vh;
             object-fit: cover;
             object-position: center center;
         }
+
         .text-content {
             color: white;
             font-size: 4vw;
@@ -41,32 +47,47 @@
         }
     </style>
 </head>
+
 <body>
 
     <div id="playerContent"></div>
+    <div id="timer" style="position: absolute; top: 20px; right: 40px; color: #fff; font-size: 2vw; background: rgba(0,0,0,0.5); padding: 0.5em 1em; border-radius: 10px;"></div>
 
     <script>
         const contents = @json($contents ?? []);
         let currentIndex = 0;
         const playerContent = document.getElementById('playerContent');
+        const timerDiv = document.getElementById('timer');
+        let duration;
 
         function showContent() {
             playerContent.innerHTML = '';
+            clearInterval(timerInterval);
 
             if (contents.length === 0) {
                 playerContent.innerHTML = '<p style="color:white; font-size:2rem;">Nenhum conteúdo disponível.</p>';
+                timerDiv.textContent = '';
                 return;
             }
 
             const item = contents[currentIndex];
-            let duration = (item.duration ?? 10) * 1000; // Fallback para 7 segundos se não vier do banco
+            let duration = (item.duration ?? 10); // segundos
+
+            // Timer visual
+            let secondsLeft = duration;
+            timerDiv.textContent = `${secondsLeft}s`;
+            timerInterval = setInterval(() => {
+                secondsLeft--;
+                timerDiv.textContent = `${secondsLeft}s`;
+                if (secondsLeft <= 0) clearInterval(timerInterval);
+            }, 1000);
 
             if (item.type === 'image') {
                 const img = document.createElement('img');
                 img.src = `/storage/${item.path}`;
                 playerContent.appendChild(img);
 
-                setTimeout(nextContent, duration);
+                setTimeout(nextContent, duration * 1000);
 
             } else if (item.type === 'video') {
                 const video = document.createElement('video');
@@ -79,7 +100,6 @@
 
                 playerContent.appendChild(video);
 
-                // Fallback de segurança: caso o vídeo não dispare o onended
                 setTimeout(nextContent, duration);
 
             } else if (item.type === 'text') {
@@ -101,4 +121,5 @@
     </script>
 
 </body>
+
 </html>

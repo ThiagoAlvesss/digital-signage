@@ -12,7 +12,7 @@ return new class extends Migration
     public function up()
     {
         Schema::table('playlist_content', function (Blueprint $table) {
-            $table->integer('duration')->default(10);  // Tempo de exibição em segundos
+            $table->integer('duration') -> nullable();  // Tempo de exibição em segundos
         });
     }
 

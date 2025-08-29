@@ -14,10 +14,11 @@ class Playlist extends Model
     /**
      * The contents that belong to the playlist.
      */
-   public function contents()
+public function contents()
 {
-    return $this->belongsToMany(Content::class, 'playlist_content'); // Adicionei 'playlist_content' aqui
-                
+    return $this->belongsToMany(Content::class, 'playlist_content')
+                ->withPivot('duration')
+                ->withTimestamps();
 }
 
     /**
@@ -34,7 +35,6 @@ class Playlist extends Model
             ->where(function ($query) use ($now) {
                 $query->whereNull('end_at')->orWhere('end_at', '>=', $now);
             })
-            ->orderBy('order', 'asc')
             ->get();
     }
 }

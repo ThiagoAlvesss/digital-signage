@@ -22,8 +22,9 @@ class PlaylistController extends Controller
      */
     public function create()
     {
-        $contents = Content::all();
-        return view('playlists.create', compact('contents'));
+        // Se quiser mostrar todos os conteúdos, use:
+        $contents = Content::select('id', 'type', 'path', 'text', 'duration')->get();
+        return view('player.preview', compact('contents'));
     }
 
     /**
@@ -47,9 +48,25 @@ class PlaylistController extends Controller
             'end_at' => $request->end_at,
         ]);
 
-        $playlist->contents()->sync($request->contents);
+        // Salva durations personalizados na pivô
+        $syncData = [];
+        foreach ($request->contents as $contentId) {
+            $duration = $request->duration[$contentId] ?? 10;
+            $syncData[$contentId] = ['duration' => $duration];
+        }
+        $playlist->contents()->sync($syncData);
 
         return redirect()->route('playlists.index')->with('success', 'Playlist criada com sucesso!');
+    }
+
+     public function preview(Playlist $playlist)
+    {
+        // Busca os conteúdos da playlist com a duração personalizada da pivô
+        $contents = $playlist->contents()->get()->map(function ($content) {
+            $content->duration = $content->pivot->duration ?? $content->duration ?? 10;
+            return $content;
+        });
+        return view('player.preview', compact('contents'));
     }
 
     /**

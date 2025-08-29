@@ -31,6 +31,7 @@ class ContentController extends Controller
             'type' => 'required|string|in:image,video,text',
             'file' => 'nullable|file|mimes:jpg,jpeg,png,mp4,mov,avi|max:51200',
             'text' => 'nullable|string',
+            'duration' => 'nullable|integer|min:1', // Validação para duração
             'start_at' => 'nullable|date',
             'end_at' => 'nullable|date|after_or_equal:start_at',
         ]);
@@ -67,6 +68,7 @@ class ContentController extends Controller
             'type'      => 'required|in:image,video,text',
             'file'      => 'nullable|file|mimes:jpeg,png,jpg,gif,svg,mp4,mov,avi|max:51200',
             'text'      => 'nullable|string|required_if:type,text',
+            'duration'  => 'nullable|integer|min:1', // Validação para duração
             'start_at'  => 'nullable|date',
             'end_at'    => 'nullable|date|after_or_equal:start_at',
             
@@ -74,6 +76,7 @@ class ContentController extends Controller
 
         $content->title = $request->title;
         $content->type = $request->type;
+        $content->duration = $request->duration; // Atualizando duração
 
         if (in_array($request->type, ['image', 'video'])) {
             if ($request->hasFile('file')) {

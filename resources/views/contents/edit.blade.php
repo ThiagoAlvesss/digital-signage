@@ -58,7 +58,12 @@
                 <textarea name="text" id="text" rows="4"
                     class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">{{ old('text', $content->text) }}</textarea>
             </div>
-
+             <div>
+                <label for="duration" class="block text-lg font-semibold mb-2 text-gray-700">Duração: </label>
+                <input type="number" name="duration " id="duration"
+                    value="{{ old('start_at', $content->duration) }}"
+                    class="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500" />
+            </div>
             <div>
                 <label for="start_at" class="block text-lg font-semibold mb-2 text-gray-700">Início do Agendamento (opcional):</label>
                 <input type="datetime-local" name="start_at" id="start_at"
